@@ -1,5 +1,6 @@
 package com.poofstudios.android.lolchampselector.api.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /*
@@ -23,8 +24,17 @@ public class Champion {
     String name;
     String title;
     RiotImage championImage;
-    List<String> tags;
+    LinkedList<String> tags;            // Maximum of 6 tags, so use a LinkedList to save memory
     ChampionInfo info;
     List<ChampionSpell> spells;
     ChampionPassive passive;
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

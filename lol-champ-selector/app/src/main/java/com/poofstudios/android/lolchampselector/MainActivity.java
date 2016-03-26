@@ -8,9 +8,11 @@ import com.poofstudios.android.lolchampselector.api.RiotGamesApi;
 import com.poofstudios.android.lolchampselector.api.RiotGamesService;
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionListResponse;
+import com.poofstudios.android.lolchampselector.recommender.ChampionRecommender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,8 +21,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private RiotGamesService mRiotGamesService;
-    private List<Champion> mChampionList;
-
+    private Map<String, Champion> mChampionMap;
+    private ChampionRecommender mChampionRecommender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ChampionListResponse> call,
                                    Response<ChampionListResponse> response) {
                 ChampionListResponse championListResponse = response.body();
-                mChampionList = championListResponse.getChampionList();
-                Log.d("LOL", "" + mChampionList.size());
+                mChampionMap = championListResponse.getChampionMap();
+                Log.d("LOL", "" + mChampionMap.size());
+
+                // Initialize ChampionRecommender with Champion data
+                initChampionRecommender();
             }
 
             @Override
@@ -51,5 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("LOL", "Request failed: " + t.getLocalizedMessage());
             }
         });
+    }
+
+    private void initChampionRecommender() {
+        mChampionRecommender = new ChampionRecommender(mChampionMap);
     }
 }
