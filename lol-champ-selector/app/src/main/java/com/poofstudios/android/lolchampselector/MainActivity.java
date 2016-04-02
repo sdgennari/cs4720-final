@@ -1,5 +1,6 @@
 package com.poofstudios.android.lolchampselector;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import com.poofstudios.android.lolchampselector.api.RiotGamesService;
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionListResponse;
 import com.poofstudios.android.lolchampselector.recommender.ChampionRecommender;
+import com.poofstudios.android.lolchampselector.recommender.RecommenderSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
                 // Initialize ChampionRecommender with Champion data
                 initChampionRecommender();
+
+                // Launch detail activity
+                Intent intent = new Intent(MainActivity.this, ChampionDetailActivity.class);
+                startActivity(intent);
             }
 
             @Override
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initChampionRecommender() {
-        mChampionRecommender = new ChampionRecommender(mChampionMap);
+        RecommenderSingleton.initChampionRecommender(mChampionMap);
+        mChampionRecommender = RecommenderSingleton.getChampionRecommender();
     }
 }

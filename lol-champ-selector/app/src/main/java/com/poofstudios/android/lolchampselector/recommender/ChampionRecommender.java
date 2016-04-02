@@ -29,7 +29,8 @@ public class ChampionRecommender {
     Set<String> mTagSet;
     Map<Champion, Set<Champion>> mChampionGraph;
 
-    public ChampionRecommender(Map<String, Champion> championMap) {
+    // Use a protected constructor so that only classes in the same package can access it
+    protected ChampionRecommender(Map<String, Champion> championMap) {
         mChampionMap = championMap;
         initializeTagSet();
         mChampionGraph = buildChampionGraph();
@@ -105,6 +106,16 @@ public class ChampionRecommender {
         return graph;
     }
 
+    public Champion getChampionByName(String name) {
+        return mChampionMap.get(name);
+    }
+
+    public Champion getRandomChampion() {
+        ArrayList<String> championList = new ArrayList<>(mChampionMap.keySet());
+        int randIdx = (int)(Math.random() * championList.size());
+        return mChampionMap.get(championList.get(randIdx));
+    }
+
     private Champion getSimilarChampion(Champion targetChampion) {
         int curDist;
         int bestDist = Integer.MAX_VALUE;
@@ -149,7 +160,7 @@ public class ChampionRecommender {
         dist += INFO_MAGIC_WEIGHT * Math.abs(lhsInfo.magic - rhsInfo.magic);
 
         // Difficulty
-        dist += INFO_DIFFICULTY_WEIGHT * Math.abs(lhsInfo.difficulty- rhsInfo.difficulty);
+        dist += INFO_DIFFICULTY_WEIGHT * Math.abs(lhsInfo.difficulty - rhsInfo.difficulty);
 
         return dist;
     }
