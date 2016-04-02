@@ -33,8 +33,16 @@ public class Champion {
         return tags;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return name;
+    }
+
+    public ChampionInfo getInfo() {
+        return info;
     }
 }

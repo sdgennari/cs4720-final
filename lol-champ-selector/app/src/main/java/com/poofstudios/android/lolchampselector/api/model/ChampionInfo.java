@@ -11,8 +11,8 @@ SAMPLE API RESPONSE
  */
 
 public class ChampionInfo {
-    int attack;
-    int defense;
-    int magic;
-    int difficulty;
+    public int attack;
+    public int defense;
+    public int magic;
+    public int difficulty;
 }

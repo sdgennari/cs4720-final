@@ -3,12 +3,14 @@ package com.poofstudios.android.lolchampselector.recommender;
 import android.util.Log;
 
 import com.poofstudios.android.lolchampselector.api.model.Champion;
+import com.poofstudios.android.lolchampselector.api.model.ChampionInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 /**
@@ -16,13 +18,31 @@ import java.util.Set;
  */
 public class ChampionRecommender {
 
+    // Integers to weight different components of champion info
+    // Note: Use integers from 0 to 10 here to avoid doubles to make math faster
+    private static final int INFO_ATTACK_WEIGHT = 10;
+    private static final int INFO_DEFENSE_WEIGHT = 10;
+    private static final int INFO_MAGIC_WEIGHT = 10;
+    private static final int INFO_DIFFICULTY_WEIGHT = 5;
+
     Map<String, Champion> mChampionMap;
     Set<String> mTagSet;
+    Map<Champion, Set<Champion>> mChampionGraph;
 
     public ChampionRecommender(Map<String, Champion> championMap) {
         mChampionMap = championMap;
         initializeTagSet();
-        buildChampionGraph();
+        mChampionGraph = buildChampionGraph();
+
+        // Test champion similarity
+        Champion test = getSimilarChampion(mChampionMap.get("Thresh"));
+        Log.d("LOL", test.getName());
+
+        test = getSimilarChampion(mChampionMap.get("Azir"));
+        Log.d("LOL", test.getName());
+
+        test = getSimilarChampion(mChampionMap.get("Caitlyn"));
+        Log.d("LOL", test.getName());
     }
 
     private void initializeTagSet() {
@@ -82,8 +102,55 @@ public class ChampionRecommender {
             graph.put(champion, edges);
         }
 
-        Log.d("LOL", "" + graph.get(mChampionMap.get("Thresh")).size());
-
         return graph;
+    }
+
+    private Champion getSimilarChampion(Champion targetChampion) {
+        int curDist;
+        int bestDist = Integer.MAX_VALUE;
+        Champion result = null;
+        Set<Champion> edges = mChampionGraph.get(targetChampion);
+
+        // Iterate through all champions and find closest one
+        for (Champion champ : edges) {
+            // Calculate distance between current and target
+            curDist = calculateChampionDistance(targetChampion, champ);
+
+            // Compare the result to the best known champ thus far
+            if (curDist < bestDist) {
+                Log.d("LOL", "best distance thus far is: " + curDist);
+                result = champ;
+                bestDist = curDist;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Approximates the similarity between two champions by calculating the distance between
+     * their stats
+     * @param lhs First champion to compare
+     * @param rhs Second champion to compare
+     * @return An int representing the distance between the two champions
+     */
+    private int calculateChampionDistance(Champion lhs, Champion rhs) {
+        int dist = 0;
+        ChampionInfo lhsInfo = lhs.getInfo();
+        ChampionInfo rhsInfo = rhs.getInfo();
+
+        // Attack
+        dist += INFO_ATTACK_WEIGHT * Math.abs(lhsInfo.attack - rhsInfo.attack);
+
+        // Defense
+        dist += INFO_DEFENSE_WEIGHT * Math.abs(lhsInfo.defense- rhsInfo.defense);
+
+        // Magic
+        dist += INFO_MAGIC_WEIGHT * Math.abs(lhsInfo.magic - rhsInfo.magic);
+
+        // Difficulty
+        dist += INFO_DIFFICULTY_WEIGHT * Math.abs(lhsInfo.difficulty- rhsInfo.difficulty);
+
+        return dist;
     }
 }
