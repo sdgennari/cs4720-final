@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.poofstudios.android.lolchampselector.api.RiotGamesApi;
 import com.poofstudios.android.lolchampselector.api.RiotGamesService;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private RiotGamesService mRiotGamesService;
     private Map<String, Champion> mChampionMap;
     private ChampionRecommender mChampionRecommender;
+    private Button mRandomButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Create instance of the RiotGamesService
         mRiotGamesService = RiotGamesApi.getService();
+
+        mRandomButton = (Button) findViewById(R.id.button_random);
+        mRandomButton.setEnabled(false);
+        mRandomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch detail activity
+                Intent intent = new Intent(MainActivity.this, ChampionDetailActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Load data from the API
         loadData();
@@ -52,9 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 // Initialize ChampionRecommender with Champion data
                 initChampionRecommender();
 
-                // Launch detail activity
-                Intent intent = new Intent(MainActivity.this, ChampionDetailActivity.class);
-                startActivity(intent);
+                // Enable the random champion button
+                mRandomButton.setEnabled(true);
             }
 
             @Override

@@ -86,12 +86,12 @@ public class ChampionDetailFragment extends Fragment {
 
 
         // Load splash art image
-        String championSplashUrl = UrlUtil.getChampionSplashUrl(mChampion.getName());
+        String championSplashUrl = UrlUtil.getChampionSplashUrl(mChampion.getKey());
         Picasso.with(rootView.getContext()).load(championSplashUrl)
                 .into(mSplashImageView);
 
         // Load champion image
-        String championImageUrl = UrlUtil.getChampionImageUrl(mChampion.getName());
+        String championImageUrl = UrlUtil.getChampionImageUrl(mChampion.getKey());
         Picasso.with(rootView.getContext()).load(championImageUrl)
                 .into(mChampionImageView);
 

@@ -5,4 +5,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_info">Information</string>
+    <string name="button_random_champion">Random Champion</string>
 </resources>

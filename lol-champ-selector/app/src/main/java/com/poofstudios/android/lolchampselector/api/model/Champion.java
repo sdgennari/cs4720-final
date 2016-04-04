@@ -33,6 +33,10 @@ public class Champion {
         return tags;
     }
 
+    public String getKey() {
+        return key;
+    }
+
     public String getName() {
         return name;
     }
