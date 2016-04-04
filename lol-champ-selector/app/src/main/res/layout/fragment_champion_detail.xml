@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.poofstudios.android.lolchampselector.ChampionDetailFragment">
 
     <RelativeLayout
@@ -25,34 +26,52 @@
             android:layout_centerInParent="true"/>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Champion Title"/>
+        android:orientation="vertical"
+        android:padding="@dimen/padding_default">
 
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Champion Subtitle"/>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Champion Title"
+            style="@style/TextAppearance.AppTheme.Title"/>
 
-    <TextView
-        android:id="@+id/tags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Fighter, Support"/>
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Champion Subtitle"
+            style="@style/TextAppearance.AppTheme.Subtitle"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_default"
-        android:text="@string/title_info"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_tags"
+            android:layout_marginTop="@dimen/padding_default"
+            style="@style/TextAppearance.AppTheme.Title"/>
 
-    <!-- TODO Replace this with a graphic view of the information -->
-    <TextView
-        android:id="@+id/info_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Fighter, Support"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:text="@string/title_info"
+            style="@style/TextAppearance.AppTheme.Title"/>
+
+        <!-- TODO Replace this with a graphic view of the information -->
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>
