@@ -2,6 +2,7 @@ package com.poofstudios.android.lolchampselector;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class ChampionDetailActivity extends AppCompatActivity {
 
@@ -16,9 +17,17 @@ public class ChampionDetailActivity extends AppCompatActivity {
         args.putBoolean(ChampionDetailFragment.ARG_RANDOM, true);
         fragment.setArguments(args);
 
-        // Add the champion detail fragment to the screen
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        // Retain the instance of the fragment if the device rotates
+        fragment.setRetainInstance(true);
+
+        if (savedInstanceState == null) {
+            // Add the champion detail fragment to the screen
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        } else {
+            // savedInstanceState not null, so do not make a new fragment
+            Log.i("LOL", "savedInstanceState not null");
+        }
     }
 }
