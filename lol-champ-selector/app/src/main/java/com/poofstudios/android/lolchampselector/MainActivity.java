@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         Log.d("LOL", "Loading champion data...");
-        final Call<ChampionListResponse> championDataCall = mRiotGamesService.getChampionData();
+        final Call<ChampionListResponse> championDataCall = mRiotGamesService.getChampionData("jp", "ja_JP");
         championDataCall.enqueue(new Callback<ChampionListResponse>() {
             @Override
             public void onResponse(Call<ChampionListResponse> call,
