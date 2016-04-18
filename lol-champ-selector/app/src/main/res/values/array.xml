@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="regions">
+        <item>North America (NA)</item>
+        <item>EU West (EUW)</item>
+        <item>Japan (JP)</item>
+        <item>Korea (KR)</item>
+    </string-array>
+    <string-array name="regions_data">
+        <item>na</item>
+        <item>euw</item>
+        <item>jp</item>
+        <item>kr</item>
+    </string-array>
+    <string-array name="locales_na">
+        <item>English (US)</item>
+    </string-array>
+    <string-array name="locales_euw">
+        <item>English (GB)</item>
+        <item>German</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Italian</item>
+    </string-array>
+    <string-array name="locales_kr">
+        <item>Korean</item>
+    </string-array>
+    <string-array name="locales_jp">
+        <item>Japanese</item>
+    </string-array>
+    <string-array name="locales_na_data">
+        <item>en_US</item>
+    </string-array>
+    <string-array name="locales_euw_data">
+        <item>en_GB</item>
+        <item>de_DE</item>
+        <item>es_ES</item>
+        <item>fr_FR</item>
+        <item>it_IT</item>
+    </string-array>
+    <string-array name="locales_kr_data">
+        <item>ko_KR</item>
+    </string-array>
+    <string-array name="locales_jp_data">
+        <item>ja_JP</item>
+    </string-array>
+</resources>

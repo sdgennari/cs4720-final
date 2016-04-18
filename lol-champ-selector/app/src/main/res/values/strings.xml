@@ -7,4 +7,8 @@
     <string name="title_info">Information</string>
     <string name="title_tags">Tags</string>
     <string name="button_random_champion">Random Champion</string>
+
+    <string name="settings_gps_switch">Region and locale from GPS</string>
+    <string name="settings_region">Region</string>
+    <string name="settings_locale">Locale</string>
 </resources>
