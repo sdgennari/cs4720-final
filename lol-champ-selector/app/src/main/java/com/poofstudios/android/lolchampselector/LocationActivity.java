@@ -123,7 +123,7 @@ public class LocationActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    // TODO Handle permission denied
+                    mLocationSwitch.setChecked(false);
                 }
             }
             break;
