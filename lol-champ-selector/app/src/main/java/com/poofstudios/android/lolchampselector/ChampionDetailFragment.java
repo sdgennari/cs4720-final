@@ -28,10 +28,9 @@ import retrofit2.Response;
 
 public class ChampionDetailFragment extends Fragment {
 
-    public static final String ARG_RANDOM = "ARG_RANDOM";
+    public static final String ARG_CHAMPION_ID = "ARG_CHAMPION_ID";
 
     private RiotGamesService mRiotGamesService;
-    private ChampionRecommender mChampionRecommender;
 
     private ImageView mSplashImageView;
     private ImageView mChampionImageView;
@@ -50,32 +49,6 @@ public class ChampionDetailFragment extends Fragment {
 
         // Get instance of the RiotGamesService
         mRiotGamesService = RiotGamesApi.getService();
-
-        // Get instance of the ChampionRecommender
-        mChampionRecommender = RecommenderSingleton.getChampionRecommender();
-
-        // Get args passed to fragment
-        Bundle args = this.getArguments();
-        if (args.getBoolean(ARG_RANDOM, false)) {
-            // Select a random champion from the ChampionRecommender
-            int championId = mChampionRecommender.getRandomChampionId();
-            final Call<Champion> championCall = mRiotGamesService.getChampionData(
-                    RiotGamesApi.getRegion(),
-                    championId,
-                    RiotGamesApi.getLocale());
-            championCall.enqueue(new Callback<Champion>() {
-                @Override
-                public void onResponse(Call<Champion> call, Response<Champion> response) {
-                    Champion champion = response.body();
-                    showChampionData(champion);
-                }
-
-                @Override
-                public void onFailure(Call<Champion> call, Throwable t) {
-                    // TODO Show error screen
-                }
-            });
-        }
     }
 
     @Override
@@ -92,7 +65,32 @@ public class ChampionDetailFragment extends Fragment {
         mTagView = (TextView) rootView.findViewById(R.id.tags);
         mInformationView = (TextView) rootView.findViewById(R.id.info_text);
 
+        getDataFromArgs();
+
         return rootView;
+    }
+
+    private void getDataFromArgs() {
+        // Get args passed to fragment
+        Bundle args = this.getArguments();
+        int championId = args.getInt(ARG_CHAMPION_ID);
+        final Call<Champion> championCall = mRiotGamesService.getChampionData(
+                RiotGamesApi.getRegion(),
+                championId,
+                RiotGamesApi.getLocale());
+
+        championCall.enqueue(new Callback<Champion>() {
+            @Override
+            public void onResponse(Call<Champion> call, Response<Champion> response) {
+                Champion champion = response.body();
+                showChampionData(champion);
+            }
+
+            @Override
+            public void onFailure(Call<Champion> call, Throwable t) {
+                // TODO Show error screen
+            }
+        });
     }
 
     private void showChampionData(Champion champion) {
@@ -111,7 +109,6 @@ public class ChampionDetailFragment extends Fragment {
         String infoString = String.format("Attack: %d; Defense: %d; Magic: %d; Difficulty: %d",
                 info.attack, info.defense, info.magic, info.difficulty);
         mInformationView.setText(infoString);
-
 
         // Load splash art image
         String championSplashUrl = UrlUtil.getChampionSplashUrl(champion.getKey());

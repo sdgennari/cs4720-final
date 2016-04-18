@@ -27,6 +27,8 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_RANDOM = "EXTRA_RANDOM";
+
     private RiotGamesService mRiotGamesService;
     private Map<String, Champion> mChampionMap;
     private ChampionRecommender mChampionRecommender;
@@ -51,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
         mRandomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Launch detail activity
+                // Launch detail activity with id of random champion
                 Intent intent = new Intent(MainActivity.this, ChampionDetailActivity.class);
+                intent.putExtra(EXTRA_RANDOM, mChampionRecommender.getRandomChampionId());
                 startActivity(intent);
             }
         });

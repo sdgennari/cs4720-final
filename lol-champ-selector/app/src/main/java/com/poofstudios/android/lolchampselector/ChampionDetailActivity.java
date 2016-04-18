@@ -11,10 +11,13 @@ public class ChampionDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_champion_detail);
 
-        // Make a ChampionDetailFragment to show a random champion
+        // Get data from extras
+        int championId = getIntent().getIntExtra(MainActivity.EXTRA_RANDOM, -1);
+
+        // Make a ChampionDetailFragment
         ChampionDetailFragment fragment = new ChampionDetailFragment();
         Bundle args = new Bundle();
-        args.putBoolean(ChampionDetailFragment.ARG_RANDOM, true);
+        args.putInt(ChampionDetailFragment.ARG_CHAMPION_ID, championId);
         fragment.setArguments(args);
 
         // Retain the instance of the fragment if the device rotates
