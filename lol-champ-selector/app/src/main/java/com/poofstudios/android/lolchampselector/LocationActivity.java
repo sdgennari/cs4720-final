@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.poofstudios.android.lolchampselector.api.RiotGamesApi;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +81,7 @@ public class LocationActivity extends AppCompatActivity {
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         // Get shared prefs
-        mPrefs = this.getPreferences(Context.MODE_PRIVATE);
+        mPrefs = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         // Load arrays from resources
         mRes = getResources();
@@ -114,10 +116,10 @@ public class LocationActivity extends AppCompatActivity {
                     // Note: Recheck permissions here to prevent Android Studio error from displaying
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+                        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 
                         // Use GPS provider when testing on the emulator
-                         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+//                         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
                     }
 
                 } else {
@@ -198,10 +200,13 @@ public class LocationActivity extends AppCompatActivity {
                     mLocaleSpinner.setSelection(0);
                 }
 
+                // Update prefs with region
                 Log.d("LOL", "Update region preferences");
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putString(getString(R.string.key_region), mRegionDataList.get(position));
                 editor.commit();
+
+                // Set the region for the API
             }
 
             @Override
@@ -220,10 +225,14 @@ public class LocationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentLocaleData = mLocaleDataList.get(position);
 
+                // Update prefs with locale
                 Log.d("LOL", "Update locale preferences: " + currentLocaleData);
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putString(getString(R.string.key_locale), currentLocaleData);
                 editor.commit();
+
+                // Set the locale for the API
+                RiotGamesApi.setLocale(currentLocaleData);
             }
 
             @Override
@@ -255,10 +264,10 @@ public class LocationActivity extends AppCompatActivity {
             Log.d("LOL", "Starting location manager");
 
             // Register the LocationManager to receive updates
-//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 
             // Use GPS provider when testing on the emulator
-             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+//             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         } else {
             // If not, request the permission explicitly
             ActivityCompat.requestPermissions(this,

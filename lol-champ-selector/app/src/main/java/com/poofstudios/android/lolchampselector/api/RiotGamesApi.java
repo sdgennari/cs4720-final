@@ -11,6 +11,9 @@ public class RiotGamesApi {
 
     static RiotGamesService sRiotGamesService;
 
+    private static String sRegion;
+    private static String sLocale;
+
     public static RiotGamesService getService() {
         if (sRiotGamesService == null) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -21,5 +24,29 @@ public class RiotGamesApi {
         }
         return sRiotGamesService;
     }
+
+    public static void setRegion(String region) {
+        sRegion = region;
+    }
+
+    public static void setLocale(String locale) {
+        sLocale = locale;
+    }
+
+    public static String getRegion() {
+        if (sRegion == null) {
+            return "na";
+        }
+        return sRegion;
+    }
+
+    public static String getLocale() {
+        if (sLocale == null) {
+            return "en_US";
+        }
+        return sLocale;
+    }
+
+
 
 }

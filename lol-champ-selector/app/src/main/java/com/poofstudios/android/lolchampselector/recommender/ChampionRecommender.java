@@ -110,10 +110,10 @@ public class ChampionRecommender {
         return mChampionMap.get(name);
     }
 
-    public Champion getRandomChampion() {
+    public int getRandomChampionId() {
         ArrayList<String> championList = new ArrayList<>(mChampionMap.keySet());
         int randIdx = (int)(Math.random() * championList.size());
-        return mChampionMap.get(championList.get(randIdx));
+        return mChampionMap.get(championList.get(randIdx)).getId();
     }
 
     private Champion getSimilarChampion(Champion targetChampion) {

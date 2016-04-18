@@ -1,5 +1,6 @@
 package com.poofstudios.android.lolchampselector.api;
 
+import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionListResponse;
 
 import retrofit2.Call;
@@ -15,6 +16,9 @@ public interface RiotGamesService {
      * Gets a static list of all available champions in the game
      * @return List of all Champions available
      */
-    @GET("static-data/{region}/v1.2/champion?champData=image,info,passive,spells,tags&api_key=" + API_KEY)
-    Call<ChampionListResponse> getChampionData(@Path("region") String region, @Query("locale") String locale);
+    @GET("static-data/{region}/v1.2/champion?champData=info,tags&api_key=" + API_KEY)
+    Call<ChampionListResponse> getAllChampionData(@Path("region") String region, @Query("locale") String locale);
+
+    @GET("static-data/{region}/v1.2/champion/{id}?champData=image,info,passive,spells,tags&api_key=" + API_KEY)
+    Call<Champion> getChampionData(@Path("region") String region, @Path("id") int championId,  @Query("locale") String locale);
 }

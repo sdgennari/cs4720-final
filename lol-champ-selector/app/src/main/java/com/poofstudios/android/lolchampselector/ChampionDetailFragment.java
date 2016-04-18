@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.poofstudios.android.lolchampselector.api.RiotGamesApi;
+import com.poofstudios.android.lolchampselector.api.RiotGamesService;
 import com.poofstudios.android.lolchampselector.api.UrlUtil;
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionInfo;
@@ -18,15 +20,18 @@ import com.poofstudios.android.lolchampselector.recommender.RecommenderSingleton
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ChampionDetailFragment extends Fragment {
 
     public static final String ARG_RANDOM = "ARG_RANDOM";
 
+    private RiotGamesService mRiotGamesService;
     private ChampionRecommender mChampionRecommender;
-    private Champion mChampion;
 
     private ImageView mSplashImageView;
     private ImageView mChampionImageView;
@@ -43,6 +48,9 @@ public class ChampionDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Get instance of the RiotGamesService
+        mRiotGamesService = RiotGamesApi.getService();
+
         // Get instance of the ChampionRecommender
         mChampionRecommender = RecommenderSingleton.getChampionRecommender();
 
@@ -50,7 +58,23 @@ public class ChampionDetailFragment extends Fragment {
         Bundle args = this.getArguments();
         if (args.getBoolean(ARG_RANDOM, false)) {
             // Select a random champion from the ChampionRecommender
-            mChampion = mChampionRecommender.getRandomChampion();
+            int championId = mChampionRecommender.getRandomChampionId();
+            final Call<Champion> championCall = mRiotGamesService.getChampionData(
+                    RiotGamesApi.getRegion(),
+                    championId,
+                    RiotGamesApi.getLocale());
+            championCall.enqueue(new Callback<Champion>() {
+                @Override
+                public void onResponse(Call<Champion> call, Response<Champion> response) {
+                    Champion champion = response.body();
+                    showChampionData(champion);
+                }
+
+                @Override
+                public void onFailure(Call<Champion> call, Throwable t) {
+                    // TODO Show error screen
+                }
+            });
         }
     }
 
@@ -68,10 +92,14 @@ public class ChampionDetailFragment extends Fragment {
         mTagView = (TextView) rootView.findViewById(R.id.tags);
         mInformationView = (TextView) rootView.findViewById(R.id.info_text);
 
+        return rootView;
+    }
+
+    private void showChampionData(Champion champion) {
         // Update the TextViews with the champion data
-        mTitleView.setText(mChampion.getName());
-        mSubtitleView.setText(mChampion.getTitle());
-        List<String> tags = mChampion.getTags();
+        mTitleView.setText(champion.getName());
+        mSubtitleView.setText(champion.getTitle());
+        List<String> tags = champion.getTags();
         String tagString = "";
         for (int i = 0; i < tags.size()-1; i++) {
             tagString += tags.get(i);
@@ -79,23 +107,21 @@ public class ChampionDetailFragment extends Fragment {
         }
         tagString += tags.get(tags.size()-1);
         mTagView.setText(tagString);
-        ChampionInfo info = mChampion.getInfo();
+        ChampionInfo info = champion.getInfo();
         String infoString = String.format("Attack: %d; Defense: %d; Magic: %d; Difficulty: %d",
                 info.attack, info.defense, info.magic, info.difficulty);
         mInformationView.setText(infoString);
 
 
         // Load splash art image
-        String championSplashUrl = UrlUtil.getChampionSplashUrl(mChampion.getKey());
-        Picasso.with(rootView.getContext()).load(championSplashUrl)
+        String championSplashUrl = UrlUtil.getChampionSplashUrl(champion.getKey());
+        Picasso.with(getContext()).load(championSplashUrl)
                 .into(mSplashImageView);
 
         // Load champion image
-        String championImageUrl = UrlUtil.getChampionImageUrl(mChampion.getKey());
-        Picasso.with(rootView.getContext()).load(championImageUrl)
+        String championImageUrl = UrlUtil.getChampionImageUrl(champion.getKey());
+        Picasso.with(getContext()).load(championImageUrl)
                 .into(mChampionImageView);
-
-        return rootView;
     }
 
 }

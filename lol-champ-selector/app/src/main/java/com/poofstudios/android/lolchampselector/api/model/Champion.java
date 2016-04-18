@@ -45,6 +45,10 @@ public class Champion {
         return title;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return name;
