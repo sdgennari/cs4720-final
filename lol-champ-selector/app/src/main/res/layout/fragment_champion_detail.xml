@@ -72,6 +72,105 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:text="@string/title_passive"
+            style="@style/TextAppearance.AppTheme.Title"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_marginBottom="@dimen/padding_half"
+            android:background="@color/lightGray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/passive_image"
+                android:layout_width="@dimen/spell_image_size"
+                android:layout_height="@dimen/spell_image_size"
+                android:layout_marginTop="@dimen/padding_quarter"
+                android:layout_marginRight="@dimen/padding_default"
+                android:layout_marginEnd="@dimen/padding_default"
+                tools:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/passive_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/passive_image"
+                android:layout_toEndOf="@id/passive_image"
+                style="@style/TextAppearance.AppTheme.Subtitle"
+                tools:text="Passive Name"/>
+
+            <TextView
+                android:id="@+id/passive_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/passive_name"
+                android:layout_toRightOf="@id/passive_image"
+                android:layout_toEndOf="@id/passive_image"
+                tools:text="Passive description"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:text="@string/title_spells"
+            style="@style/TextAppearance.AppTheme.Title"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_marginBottom="@dimen/padding_half"
+            android:background="@color/lightGray" />
+
+        <include
+            android:id="@+id/spell_q"
+            layout="@layout/include_spell" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_marginBottom="@dimen/padding_half"
+            android:background="@color/lightGray" />
+
+        <include
+            android:id="@+id/spell_w"
+            layout="@layout/include_spell" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_marginBottom="@dimen/padding_half"
+            android:background="@color/lightGray" />
+
+        <include
+            android:id="@+id/spell_e"
+            layout="@layout/include_spell" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/padding_half"
+            android:layout_marginBottom="@dimen/padding_half"
+            android:background="@color/lightGray" />
+
+        <include
+            android:id="@+id/spell_r"
+            layout="@layout/include_spell" />
+
     </LinearLayout>
 
 </LinearLayout>

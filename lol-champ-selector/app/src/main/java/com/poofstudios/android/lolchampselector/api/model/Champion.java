@@ -49,6 +49,14 @@ public class Champion {
         return id;
     }
 
+    public ChampionPassive getPassive() {
+        return passive;
+    }
+
+    public List<ChampionSpell> getSpells() {
+        return spells;
+    }
+
     @Override
     public String toString() {
         return name;

@@ -15,6 +15,8 @@ import com.poofstudios.android.lolchampselector.api.RiotGamesService;
 import com.poofstudios.android.lolchampselector.api.UrlUtil;
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionInfo;
+import com.poofstudios.android.lolchampselector.api.model.ChampionPassive;
+import com.poofstudios.android.lolchampselector.api.model.ChampionSpell;
 import com.poofstudios.android.lolchampselector.recommender.ChampionRecommender;
 import com.poofstudios.android.lolchampselector.recommender.RecommenderSingleton;
 import com.squareup.picasso.Picasso;
@@ -38,6 +40,15 @@ public class ChampionDetailFragment extends Fragment {
     private TextView mSubtitleView;
     private TextView mTagView;
     private TextView mInformationView;
+
+    private ImageView mPassiveImageView;
+    private TextView mPassiveNameView;
+    private TextView mPassiveDescView;
+
+    private ImageView[] mSpellImageViews = new ImageView[4];
+    private TextView[] mSpellNameViews = new TextView[4];
+    private TextView[] mSpellDescViews = new TextView[4];
+
 
     public ChampionDetailFragment() {
         // Required empty public constructor
@@ -64,6 +75,30 @@ public class ChampionDetailFragment extends Fragment {
         mSubtitleView = (TextView) rootView.findViewById(R.id.subtitle);
         mTagView = (TextView) rootView.findViewById(R.id.tags);
         mInformationView = (TextView) rootView.findViewById(R.id.info_text);
+
+        mPassiveImageView = (ImageView) rootView.findViewById(R.id.passive_image);
+        mPassiveNameView = (TextView) rootView.findViewById(R.id.passive_name);
+        mPassiveDescView = (TextView) rootView.findViewById(R.id.passive_description);
+
+        ViewGroup spellViewGroup = (ViewGroup) rootView.findViewById(R.id.spell_q);
+        mSpellImageViews[0] = (ImageView) spellViewGroup.findViewById(R.id.spell_image);
+        mSpellNameViews[0] = (TextView) spellViewGroup.findViewById(R.id.spell_name);
+        mSpellDescViews[0] = (TextView) spellViewGroup.findViewById(R.id.spell_description);
+
+        spellViewGroup = (ViewGroup) rootView.findViewById(R.id.spell_w);
+        mSpellImageViews[1] = (ImageView) spellViewGroup.findViewById(R.id.spell_image);
+        mSpellNameViews[1] = (TextView) spellViewGroup.findViewById(R.id.spell_name);
+        mSpellDescViews[1] = (TextView) spellViewGroup.findViewById(R.id.spell_description);
+
+        spellViewGroup = (ViewGroup) rootView.findViewById(R.id.spell_e);
+        mSpellImageViews[2] = (ImageView) spellViewGroup.findViewById(R.id.spell_image);
+        mSpellNameViews[2] = (TextView) spellViewGroup.findViewById(R.id.spell_name);
+        mSpellDescViews[2] = (TextView) spellViewGroup.findViewById(R.id.spell_description);
+
+        spellViewGroup = (ViewGroup) rootView.findViewById(R.id.spell_r);
+        mSpellImageViews[3] = (ImageView) spellViewGroup.findViewById(R.id.spell_image);
+        mSpellNameViews[3] = (TextView) spellViewGroup.findViewById(R.id.spell_name);
+        mSpellDescViews[3] = (TextView) spellViewGroup.findViewById(R.id.spell_description);
 
         getDataFromArgs();
 
@@ -119,6 +154,26 @@ public class ChampionDetailFragment extends Fragment {
         String championImageUrl = UrlUtil.getChampionImageUrl(champion.getKey());
         Picasso.with(getContext()).load(championImageUrl)
                 .into(mChampionImageView);
+
+        // PASSIVE
+        ChampionPassive passive = champion.getPassive();
+        mPassiveNameView.setText(passive.getName());
+        mPassiveDescView.setText(passive.getSanitizedDescription());
+        String passiveImageUrl = UrlUtil.getPassiveImageUrl(passive.getFullImageName());
+        Picasso.with(getContext()).load(passiveImageUrl)
+                .into(mPassiveImageView);
+
+        // SPELLS
+        int idx = 0;
+        String spellImageUrl;
+        for (ChampionSpell spell : champion.getSpells()) {
+            mSpellNameViews[idx].setText(spell.getName());
+            mSpellDescViews[idx].setText(spell.getSanitizedDescription());
+            spellImageUrl = UrlUtil.getSpellImageUrl(spell.getFullImageName());
+            Picasso.with(getContext()).load(spellImageUrl)
+                    .into(mSpellImageViews[idx]);
+            idx++;
+        }
     }
 
 }

@@ -14,4 +14,7 @@
     <dimen name="text_subtitle">18sp</dimen>
     <dimen name="text_default">14sp</dimen>
 
+    <!-- Image Sizes -->
+    <dimen name="spell_image_size">48dp</dimen>
+
 </resources>

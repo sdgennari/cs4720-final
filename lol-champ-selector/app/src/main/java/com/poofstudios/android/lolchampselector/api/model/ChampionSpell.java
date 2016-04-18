@@ -29,14 +29,31 @@ SAMPLE API RESPONSE
 
 public class ChampionSpell {
     String name;
+    String sanitizedDescription;
+    RiotImage image;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSanitizedDescription() {
+        return sanitizedDescription;
+    }
+
+    public String getFullImageName() {
+        return image.full;
+    }
+
+    // Ignore this data for now
+    /*
     String description;
     String sanitizedTooltip;
-    RiotImage image;
     String resource;
     List<Integer> cost;
     String costType;
     List<ChampionSpellVar> vars;
     String key;
+    */
 
     /*
     SAMPLE API RESPONSE
@@ -48,9 +65,11 @@ public class ChampionSpell {
         ]
     }
      */
+    /*
     class ChampionSpellVar {
         String key;
         String link;
         List<Double> coeff;
     }
+    */
 }
