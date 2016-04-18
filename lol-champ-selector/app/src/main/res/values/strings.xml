@@ -11,4 +11,7 @@
     <string name="settings_gps_switch">Region and locale from GPS</string>
     <string name="settings_region">Region</string>
     <string name="settings_locale">Locale</string>
+    <string name="key_region">key_region</string>
+    <string name="key_locale">key_locale</string>
+    <string name="key_gps_enabled">key_gps_enabled</string>
 </resources>

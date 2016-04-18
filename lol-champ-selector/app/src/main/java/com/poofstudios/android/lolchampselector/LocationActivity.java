@@ -2,6 +2,7 @@ package com.poofstudios.android.lolchampselector;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Address;
@@ -32,11 +33,12 @@ public class LocationActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_LOCATION = 0;
 
-    private LocationManager mLocationManager;
     private Spinner mRegionSpinner;
     private Spinner mLocaleSpinner;
     private Switch mLocationSwitch;
 
+    private LocationManager mLocationManager;
+    private SharedPreferences mPrefs;
     private Resources mRes;
 
     private List<String> mRegionList;
@@ -73,8 +75,11 @@ public class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-        // Create new location manager
+        // Get location manager
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Get shared prefs
+        mPrefs = this.getPreferences(Context.MODE_PRIVATE);
 
         // Load arrays from resources
         mRes = getResources();
@@ -90,9 +95,6 @@ public class LocationActivity extends AppCompatActivity {
 
         // Configure data and listeners for the views
         configureViews();
-
-        // Create the location manager
-//        startLocationManager();
     }
 
     @Override
@@ -137,13 +139,16 @@ public class LocationActivity extends AppCompatActivity {
                     mRegionSpinner.setEnabled(false);
                     mLocaleSpinner.setEnabled(false);
                     startLocationManager();
-
                 } else {
                     // User has selected to manually input region and locale
                     mRegionSpinner.setEnabled(true);
                     mLocaleSpinner.setEnabled(true);
                     stopLocationUpdates();
                 }
+
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(getString(R.string.key_gps_enabled), isChecked);
+                editor.commit();
             }
         });
 
@@ -193,15 +198,10 @@ public class LocationActivity extends AppCompatActivity {
                     mLocaleSpinner.setSelection(0);
                 }
 
-                // Disable the spinner if only 1 locale is available
-                if (mLocaleList.size() == 1) {
-                    mLocaleSpinner.setEnabled(false);
-                } else {
-                    mLocaleSpinner.setEnabled(true);
-                }
-
-                // TODO Update preferences
                 Log.d("LOL", "Update region preferences");
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putString(getString(R.string.key_region), mRegionDataList.get(position));
+                editor.commit();
             }
 
             @Override
@@ -220,8 +220,10 @@ public class LocationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentLocaleData = mLocaleDataList.get(position);
 
-                // TODO Update preferences
                 Log.d("LOL", "Update locale preferences: " + currentLocaleData);
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putString(getString(R.string.key_locale), currentLocaleData);
+                editor.commit();
             }
 
             @Override
@@ -229,6 +231,21 @@ public class LocationActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
+
+        // Set the data based on the saved values
+        // Configure the GPS toggle switch
+        boolean isLocationEnabled = mPrefs.getBoolean(getString(R.string.key_gps_enabled), false);
+        mLocationSwitch.setChecked(isLocationEnabled);
+
+        // Configure the region and locale settings
+        String region = mPrefs.getString(getString(R.string.key_region), "");
+        int regionIdx = mRegionDataList.indexOf(region);
+        currentLocaleData = mPrefs.getString(getString(R.string.key_locale), "");
+        if (regionIdx != -1) {
+            mRegionSpinner.setSelection(regionIdx);
+        } else {
+            mRegionSpinner.setSelection(0);
+        }
     }
 
     private void startLocationManager() {
