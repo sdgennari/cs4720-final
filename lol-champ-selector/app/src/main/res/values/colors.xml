@@ -7,4 +7,9 @@
     <color name="white">#ffffff</color>
     <color name="lightGray">#eeeeee</color>
     <color name="overlay">#77000000</color>
+
+    <color name="attack_red">#f44336</color>
+    <color name="defense_green">#4caf50</color>
+    <color name="magic_blue">#2196f3</color>
+    <color name="difficulty_purple">#9c27b0</color>
 </resources>

@@ -1,176 +1,247 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context="com.poofstudios.android.lolchampselector.ChampionDetailFragment">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/image_splash"
-            android:layout_width="match_parent"
-            android:layout_height="256dp"
-            android:layout_centerInParent="true"
-            android:scaleType="centerCrop"
-            android:tint="@color/overlay"/>
-
-        <ImageView
-            android:id="@+id/image_champ"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:scaleType="centerCrop"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="@dimen/padding_default">
 
-        <TextView
-            android:id="@+id/title"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Champion Title"
-            style="@style/TextAppearance.AppTheme.Title"/>
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="false">
 
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Champion Subtitle"
-            style="@style/TextAppearance.AppTheme.Subtitle"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_tags"
-            android:layout_marginTop="@dimen/padding_default"
-            style="@style/TextAppearance.AppTheme.Title"/>
-
-        <TextView
-            android:id="@+id/tags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Fighter, Support"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_default"
-            android:text="@string/title_info"
-            style="@style/TextAppearance.AppTheme.Title"/>
-
-        <!-- TODO Replace this with a graphic view of the information -->
-        <TextView
-            android:id="@+id/info_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_default"
-            android:text="@string/title_passive"
-            style="@style/TextAppearance.AppTheme.Title"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/padding_half"
-            android:layout_marginBottom="@dimen/padding_half"
-            android:background="@color/lightGray" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/passive_image"
-                android:layout_width="@dimen/spell_image_size"
-                android:layout_height="@dimen/spell_image_size"
-                android:layout_marginTop="@dimen/padding_quarter"
-                android:layout_marginRight="@dimen/padding_default"
-                android:layout_marginEnd="@dimen/padding_default"
-                tools:src="@mipmap/ic_launcher"/>
-
-            <TextView
-                android:id="@+id/passive_name"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@id/passive_image"
-                android:layout_toEndOf="@id/passive_image"
-                style="@style/TextAppearance.AppTheme.Subtitle"
-                tools:text="Passive Name"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/white"
+                tools:context="com.poofstudios.android.lolchampselector.ChampionDetailFragment">
 
-            <TextView
-                android:id="@+id/passive_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/passive_name"
-                android:layout_toRightOf="@id/passive_image"
-                android:layout_toEndOf="@id/passive_image"
-                tools:text="Passive description"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/image_splash"
+                        android:layout_width="match_parent"
+                        android:layout_height="256dp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/overlay"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_default"
-            android:text="@string/title_spells"
-            style="@style/TextAppearance.AppTheme.Title"/>
+                    <ImageView
+                        android:id="@+id/image_champ"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:scaleType="centerCrop"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/padding_half"
-            android:layout_marginBottom="@dimen/padding_half"
-            android:background="@color/lightGray" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_default">
 
-        <include
-            android:id="@+id/spell_q"
-            layout="@layout/include_spell" />
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Champion Title"
+                        style="@style/TextAppearance.AppTheme.Title"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/padding_half"
-            android:layout_marginBottom="@dimen/padding_half"
-            android:background="@color/lightGray" />
+                    <TextView
+                        android:id="@+id/subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Champion Subtitle"
+                        style="@style/TextAppearance.AppTheme.Subtitle"/>
 
-        <include
-            android:id="@+id/spell_w"
-            layout="@layout/include_spell" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_tags"
+                        android:layout_marginTop="@dimen/padding_default"
+                        style="@style/TextAppearance.AppTheme.Title"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/padding_half"
-            android:layout_marginBottom="@dimen/padding_half"
-            android:background="@color/lightGray" />
+                    <TextView
+                        android:id="@+id/tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Fighter, Support"/>
 
-        <include
-            android:id="@+id/spell_e"
-            layout="@layout/include_spell" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_default"
+                        android:text="@string/title_info"
+                        style="@style/TextAppearance.AppTheme.Title"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/padding_half"
-            android:layout_marginBottom="@dimen/padding_half"
-            android:background="@color/lightGray" />
+                    <!-- Champion Info -->
+                    <TextView
+                        android:text="@string/info_attack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/spell_r"
-            layout="@layout/include_spell" />
+                    <ProgressBar
+                        android:id="@+id/bar_attack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/attack_red"
+                        android:paddingBottom="@dimen/padding_half"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
 
-    </LinearLayout>
+                    <TextView
+                        android:text="@string/info_defense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-</LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/bar_defense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/defense_green"
+                        android:paddingBottom="@dimen/padding_half"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
+
+                    <TextView
+                        android:text="@string/info_magic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <ProgressBar
+                        android:id="@+id/bar_magic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/magic_blue"
+                        android:paddingBottom="@dimen/padding_half"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
+
+                    <TextView
+                        android:text="@string/info_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <ProgressBar
+                        android:id="@+id/bar_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/difficulty_purple"
+                        android:paddingBottom="@dimen/padding_half"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
+
+                    <!-- Passive -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_default"
+                        android:text="@string/title_passive"
+                        style="@style/TextAppearance.AppTheme.Title"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:layout_marginBottom="@dimen/padding_half"
+                        android:background="@color/lightGray" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/passive_image"
+                            android:layout_width="@dimen/spell_image_size"
+                            android:layout_height="@dimen/spell_image_size"
+                            android:layout_marginTop="@dimen/padding_quarter"
+                            android:layout_marginRight="@dimen/padding_default"
+                            android:layout_marginEnd="@dimen/padding_default"
+                            tools:src="@mipmap/ic_launcher"/>
+
+                        <TextView
+                            android:id="@+id/passive_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_toRightOf="@id/passive_image"
+                            android:layout_toEndOf="@id/passive_image"
+                            style="@style/TextAppearance.AppTheme.Subtitle"
+                            tools:text="Passive Name"/>
+
+                        <TextView
+                            android:id="@+id/passive_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/passive_name"
+                            android:layout_toRightOf="@id/passive_image"
+                            android:layout_toEndOf="@id/passive_image"
+                            tools:text="Passive description"/>
+
+                    </RelativeLayout>
+
+                    <!-- Spells -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_default"
+                        android:text="@string/title_spells"
+                        style="@style/TextAppearance.AppTheme.Title"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:layout_marginBottom="@dimen/padding_half"
+                        android:background="@color/lightGray" />
+
+                    <include
+                        android:id="@+id/spell_q"
+                        layout="@layout/include_spell" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:layout_marginBottom="@dimen/padding_half"
+                        android:background="@color/lightGray" />
+
+                    <include
+                        android:id="@+id/spell_w"
+                        layout="@layout/include_spell" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:layout_marginBottom="@dimen/padding_half"
+                        android:background="@color/lightGray" />
+
+                    <include
+                        android:id="@+id/spell_e"
+                        layout="@layout/include_spell" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/padding_half"
+                        android:layout_marginBottom="@dimen/padding_half"
+                        android:background="@color/lightGray" />
+
+                    <include
+                        android:id="@+id/spell_r"
+                        layout="@layout/include_spell" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </FrameLayout>
+
+</ScrollView>

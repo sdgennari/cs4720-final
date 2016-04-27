@@ -1,13 +1,19 @@
 package com.poofstudios.android.lolchampselector;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.poofstudios.android.lolchampselector.api.RiotGamesApi;
@@ -31,6 +37,7 @@ import retrofit2.Response;
 public class ChampionDetailFragment extends Fragment {
 
     public static final String ARG_CHAMPION_ID = "ARG_CHAMPION_ID";
+    private static final int ANIM_DURATION = 500;
 
     private RiotGamesService mRiotGamesService;
 
@@ -39,7 +46,11 @@ public class ChampionDetailFragment extends Fragment {
     private TextView mTitleView;
     private TextView mSubtitleView;
     private TextView mTagView;
-    private TextView mInformationView;
+
+    private ProgressBar mAttackBar;
+    private ProgressBar mDefenseBar;
+    private ProgressBar mMagicBar;
+    private ProgressBar mDifficultyBar;
 
     private ImageView mPassiveImageView;
     private TextView mPassiveNameView;
@@ -74,7 +85,11 @@ public class ChampionDetailFragment extends Fragment {
         mTitleView = (TextView) rootView.findViewById(R.id.title);
         mSubtitleView = (TextView) rootView.findViewById(R.id.subtitle);
         mTagView = (TextView) rootView.findViewById(R.id.tags);
-        mInformationView = (TextView) rootView.findViewById(R.id.info_text);
+
+        mAttackBar = (ProgressBar) rootView.findViewById(R.id.bar_attack);
+        mDefenseBar = (ProgressBar) rootView.findViewById(R.id.bar_defense);
+        mMagicBar = (ProgressBar) rootView.findViewById(R.id.bar_magic);
+        mDifficultyBar = (ProgressBar) rootView.findViewById(R.id.bar_difficulty);
 
         mPassiveImageView = (ImageView) rootView.findViewById(R.id.passive_image);
         mPassiveNameView = (TextView) rootView.findViewById(R.id.passive_name);
@@ -140,10 +155,17 @@ public class ChampionDetailFragment extends Fragment {
         }
         tagString += tags.get(tags.size()-1);
         mTagView.setText(tagString);
+
         ChampionInfo info = champion.getInfo();
-        String infoString = String.format("Attack: %d; Defense: %d; Magic: %d; Difficulty: %d",
-                info.attack, info.defense, info.magic, info.difficulty);
-        mInformationView.setText(infoString);
+
+        // Animate champion information
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(configureProgressAnimation(mAttackBar, info.attack * 10))
+                .with(configureProgressAnimation(mDefenseBar, info.defense * 10))
+                .with(configureProgressAnimation(mMagicBar, info.magic * 10))
+                .with(configureProgressAnimation(mDifficultyBar, info.difficulty * 10))
+                .after(200);
+        animatorSet.start();
 
         // Load splash art image
         String championSplashUrl = UrlUtil.getChampionSplashUrl(champion.getKey());
@@ -174,6 +196,13 @@ public class ChampionDetailFragment extends Fragment {
                     .into(mSpellImageViews[idx]);
             idx++;
         }
+    }
+
+    private ValueAnimator configureProgressAnimation(ProgressBar bar, int progress) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(bar, "progress", progress);
+        animation.setDuration(ANIM_DURATION);
+        animation.setInterpolator(new DecelerateInterpolator());
+        return animation;
     }
 
 }

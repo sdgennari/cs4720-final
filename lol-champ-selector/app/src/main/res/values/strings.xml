@@ -12,6 +12,12 @@
     <string name="title_spells">Spells</string>
     <string name="button_random_champion">Random Champion</string>
 
+    <!-- champion info titles -->
+    <string name="info_attack">Attack</string>
+    <string name="info_defense">Defense</string>
+    <string name="info_magic">Magic</string>
+    <string name="info_difficulty">Difficulty</string>
+
     <string name="settings_gps_switch">Region and locale from GPS</string>
     <string name="settings_region">Region</string>
     <string name="settings_locale">Locale</string>
