@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class RecommenderSingleton {
 
-    static ChampionRecommender sChampionRecommender;
+    static ChampionRecommender sChampionRecommender = new ChampionRecommender();
 
     @Nullable
     public static ChampionRecommender getChampionRecommender() {
@@ -16,9 +16,7 @@ public class RecommenderSingleton {
     }
 
     public static void initChampionRecommender(Map<String, Champion> championMap) {
-        if (sChampionRecommender == null) {
-            sChampionRecommender = new ChampionRecommender(championMap);
-        }
+       sChampionRecommender.init(championMap);
     }
 
 }

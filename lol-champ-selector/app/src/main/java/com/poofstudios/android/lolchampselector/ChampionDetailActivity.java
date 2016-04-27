@@ -1,8 +1,11 @@
 package com.poofstudios.android.lolchampselector;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 public class ChampionDetailActivity extends AppCompatActivity {
 
@@ -11,8 +14,13 @@ public class ChampionDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_champion_detail);
 
+        // Configure toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Get data from extras
-        int championId = getIntent().getIntExtra(MainActivity.EXTRA_RANDOM, -1);
+        int championId = getIntent().getIntExtra(RandomFragment.EXTRA_RANDOM, -1);
 
         // Make a ChampionDetailFragment
         ChampionDetailFragment fragment = new ChampionDetailFragment();
@@ -31,6 +39,18 @@ public class ChampionDetailActivity extends AppCompatActivity {
         } else {
             // savedInstanceState not null, so do not make a new fragment
             Log.i("LOL", "savedInstanceState not null");
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

@@ -28,9 +28,10 @@ public class ChampionRecommender {
     Map<String, Champion> mChampionMap;
     Set<String> mTagSet;
     Map<Champion, Set<Champion>> mChampionGraph;
+    boolean isInitialized = false;
 
-    // Use a protected constructor so that only classes in the same package can access it
-    protected ChampionRecommender(Map<String, Champion> championMap) {
+    protected void init(Map<String, Champion> championMap) {
+        isInitialized = true;
         mChampionMap = championMap;
         initializeTagSet();
         mChampionGraph = buildChampionGraph();
@@ -44,6 +45,10 @@ public class ChampionRecommender {
 
         test = getSimilarChampion(mChampionMap.get("Caitlyn"));
         Log.d("LOL", test.getName());
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     private void initializeTagSet() {

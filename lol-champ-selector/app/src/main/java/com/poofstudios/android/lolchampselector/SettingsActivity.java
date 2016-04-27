@@ -12,10 +12,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_LOCATION = 0;
 
@@ -76,6 +79,12 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+
+        // Configure toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.toolbar_settings);
 
         // Get location manager
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -187,7 +196,7 @@ public class LocationActivity extends AppCompatActivity {
                 }
 
                 // Update locale spinner
-                mLocaleAdapter = new ArrayAdapter<>(LocationActivity.this,
+                mLocaleAdapter = new ArrayAdapter<>(SettingsActivity.this,
                         android.R.layout.simple_spinner_item, mLocaleList);
                 mLocaleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mLocaleSpinner.setAdapter(mLocaleAdapter);
@@ -352,6 +361,17 @@ public class LocationActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Log.d("LOL", "Stopping location updates");
             mLocationManager.removeUpdates(mLocationListener);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
