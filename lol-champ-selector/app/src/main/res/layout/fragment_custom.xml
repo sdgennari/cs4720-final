@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    tools:context="com.poofstudios.android.lolchampselector.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/custom_directions"
+            android:gravity="center"
+            style="@style/TextAppearance.AppTheme.Title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:text="@string/title_tags"
+            style="@style/TextAppearance.AppTheme.Subtitle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Spinner
+                android:id="@+id/spinner_tag_primary"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"/>
+
+            <Spinner
+                android:id="@+id/spinner_tag_secondary"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"/>
+
+        </LinearLayout>
+
+        <!-- Champion Info -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:text="@string/title_info"
+            style="@style/TextAppearance.AppTheme.Subtitle"/>
+
+        <TextView
+            android:text="@string/info_attack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/bar_attack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/attack_red"
+            android:thumbTint="@color/attack_red"
+            android:max="10"
+            android:progress="5"
+            android:paddingTop="@dimen/padding_half"
+            android:paddingBottom="@dimen/padding_half"/>
+
+        <TextView
+            android:text="@string/info_defense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/bar_defense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/defense_green"
+            android:thumbTint="@color/defense_green"
+            android:max="10"
+            android:progress="6"
+            android:paddingTop="@dimen/padding_half"
+            android:paddingBottom="@dimen/padding_half"/>
+
+        <TextView
+            android:text="@string/info_magic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/bar_magic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/magic_blue"
+            android:thumbTint="@color/magic_blue"
+            android:max="10"
+            android:progress="4"
+            android:paddingTop="@dimen/padding_half"
+            android:paddingBottom="@dimen/padding_half"/>
+
+        <TextView
+            android:text="@string/info_difficulty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/bar_difficulty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/difficulty_purple"
+            android:thumbTint="@color/difficulty_purple"
+            android:max="10"
+            android:progress="7"
+            android:paddingTop="@dimen/padding_half"
+            android:paddingBottom="@dimen/padding_half"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/custom_button"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_marginTop="@dimen/padding_default"
+            android:padding="@dimen/padding_button"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+</ScrollView>

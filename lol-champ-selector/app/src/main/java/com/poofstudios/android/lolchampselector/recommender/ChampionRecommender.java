@@ -30,10 +30,13 @@ public class ChampionRecommender {
     Map<Champion, Set<Champion>> mChampionGraph;
     boolean isInitialized = false;
 
+    protected  ChampionRecommender() {
+        initializeTagSet();
+    }
+
     protected void init(Map<String, Champion> championMap) {
         isInitialized = true;
         mChampionMap = championMap;
-        initializeTagSet();
         mChampionGraph = buildChampionGraph();
 
         // Test champion similarity
@@ -59,6 +62,10 @@ public class ChampionRecommender {
         mTagSet.add("Marksman");
         mTagSet.add("Support");
         mTagSet.add("Tank");
+    }
+
+    public Set<String> getTags() {
+        return mTagSet;
     }
 
     /**

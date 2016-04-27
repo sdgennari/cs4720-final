@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new RandomFragment(), "RANDOM");
         adapter.addFragment(new RandomFragment(), "CHAMPION");
-        adapter.addFragment(new RandomFragment(), "DATA");
+        adapter.addFragment(new CustomFragment(), "CUSTOM");
         viewPager.setAdapter(adapter);
     }
 
