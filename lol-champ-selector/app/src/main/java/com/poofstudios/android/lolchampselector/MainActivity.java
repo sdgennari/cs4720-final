@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,8 +20,6 @@ import com.poofstudios.android.lolchampselector.api.model.ChampionListResponse;
 import com.poofstudios.android.lolchampselector.recommender.ChampionRecommender;
 import com.poofstudios.android.lolchampselector.recommender.RecommenderSingleton;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -33,10 +28,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-    private ViewPagerAdapter mAdapter;
+    public static final String EXTRA_CHAMPION_ID_LIST = "EXTRA_CHAMPION_ID_LIST";
 
     private RiotGamesService mRiotGamesService;
     private Map<String, Champion> mChampionMap;
@@ -47,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(mViewPager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-        mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mTabLayout.setupWithViewPager(mViewPager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         // Create instance of the RiotGamesService
         mRiotGamesService = RiotGamesApi.getService();
@@ -69,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mAdapter.addFragment(new RandomFragment(), "RANDOM");
-        mAdapter.addFragment(new RandomFragment(), "CHAMPION");
-        mAdapter.addFragment(new RandomFragment(), "DATA");
-        viewPager.setAdapter(mAdapter);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new RandomFragment(), "RANDOM");
+        adapter.addFragment(new RandomFragment(), "CHAMPION");
+        adapter.addFragment(new RandomFragment(), "DATA");
+        viewPager.setAdapter(adapter);
     }
 
     private void loadData() {
@@ -125,34 +117,5 @@ public class MainActivity extends AppCompatActivity {
     private void launchSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitleList.get(position);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mTitleList.add(title);
-        }
     }
 }
