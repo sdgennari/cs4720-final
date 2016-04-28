@@ -29,10 +29,13 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_CHAMPION_ID_LIST = "EXTRA_CHAMPION_ID_LIST";
+    public static final String STATE_FRAGMENT_IDX = "STATE_FRAGMENT_IDX";
 
     private RiotGamesService mRiotGamesService;
     private Map<String, Champion> mChampionMap;
     private ChampionRecommender mChampionRecommender;
+
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(mViewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        if (savedInstanceState != null) {
+            mViewPager.setCurrentItem(savedInstanceState.getInt(STATE_FRAGMENT_IDX, 0));
+        }
 
         // Create instance of the RiotGamesService
         mRiotGamesService = RiotGamesApi.getService();
@@ -94,6 +101,12 @@ public class MainActivity extends AppCompatActivity {
     private void initChampionRecommender() {
         RecommenderSingleton.initChampionRecommender(mChampionMap);
         mChampionRecommender = RecommenderSingleton.getChampionRecommender();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_FRAGMENT_IDX, mViewPager.getCurrentItem());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
