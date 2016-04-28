@@ -52,7 +52,7 @@ public class CustomFragment extends Fragment {
         mSecondaryTagSpinner = (Spinner) rootView.findViewById(R.id.spinner_tag_secondary);
 
         // Configure spinners
-        final List<String> tagList = new ArrayList<>(mChampionRecommender.getTags());
+        final List<String> tagList = mChampionRecommender.getTags();
         Collections.sort(tagList);
         tagList.add(0, "N/A");
         mPrimaryTagAdapter = new ArrayAdapter<>(getContext(),

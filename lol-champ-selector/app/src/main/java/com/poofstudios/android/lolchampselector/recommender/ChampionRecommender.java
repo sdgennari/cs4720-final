@@ -1,11 +1,15 @@
 package com.poofstudios.android.lolchampselector.recommender;
 
+import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionInfo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,21 +27,63 @@ public class ChampionRecommender {
     private static final int INFO_ATTACK_WEIGHT = 10;
     private static final int INFO_DEFENSE_WEIGHT = 10;
     private static final int INFO_MAGIC_WEIGHT = 10;
-    private static final int INFO_DIFFICULTY_WEIGHT = 5;
+    private static final int INFO_DIFFICULTY_WEIGHT = 7;
+    private static final int TAG_WEIGHT = 4;
 
     Map<String, Champion> mChampionMap;
-    Set<String> mTagSet;
-    Map<Champion, Set<Champion>> mChampionGraph;
+    List<Champion> mChampionList;
+
+    // Matrix to store the distances between champions
+    int[][] mChampionAdjMatrix;
+
+    /* Make a matrix to represent the distances between two tags. The positions are given by the
+     * index of the string in the tag list.
+     * 0 : Assassin
+     * 1 : Fighter
+     * 2 : Mage
+     * 3 : Marksman
+     * 4 : Support
+     * 5 : Tank
+     */
+    int[][] mTagAdjMatrix = {
+            {0, 4, 2, 5, 7, 7},
+            {4, 0, 4, 6, 5, 3},
+            {2, 4, 0, 3, 4, 7},
+            {5, 6, 3, 0, 4, 5},
+            {7, 5, 4, 4, 0, 2},
+            {7, 3, 7, 5, 2, 0}
+    };
+
+    // List of tags for champions
+    List<String> mTagList;
+
     boolean isInitialized = false;
 
     protected  ChampionRecommender() {
-        initializeTagSet();
+        initializeTagList();
     }
 
     protected void init(Map<String, Champion> championMap) {
         isInitialized = true;
         mChampionMap = championMap;
-        mChampionGraph = buildChampionGraph();
+
+        // Get a list of champions from the map
+        mChampionList = new ArrayList<>();
+        for (String name : mChampionMap.keySet()) {
+            mChampionList.add(mChampionMap.get(name));
+        }
+
+        // Sort the list of champions for consistency
+        Collections.sort(mChampionList, new Comparator<Champion>() {
+            @Override
+            public int compare(Champion lhs, Champion rhs) {
+                return lhs.getName().compareToIgnoreCase(rhs.getName());
+            }
+        });
+
+        // Populate the champion adj matrix
+        mChampionAdjMatrix = new int[mChampionMap.size()][mChampionMap.size()];
+        buildChampionAjdMatrix(mChampionAdjMatrix);
 
         // Test champion similarity
         Champion test = getSimilarChampion(mChampionMap.get("Thresh"));
@@ -48,78 +94,55 @@ public class ChampionRecommender {
 
         test = getSimilarChampion(mChampionMap.get("Caitlyn"));
         Log.d("LOL", test.getName());
+
+        List<Champion> testResult = getKSimilarChampions(mChampionMap.get("Thresh"), 5);
+        for (Champion testChampion : testResult) {
+            Log.d("LOL", testChampion.getName());
+        }
     }
 
     public boolean isInitialized() {
         return isInitialized;
     }
 
-    private void initializeTagSet() {
-        mTagSet = new HashSet<>();
-        mTagSet.add("Assassin");
-        mTagSet.add("Fighter");
-        mTagSet.add("Mage");
-        mTagSet.add("Marksman");
-        mTagSet.add("Support");
-        mTagSet.add("Tank");
+    private void initializeTagList() {
+        mTagList = new ArrayList<>();
+        mTagList.add("Assassin");
+        mTagList.add("Fighter");
+        mTagList.add("Mage");
+        mTagList.add("Marksman");
+        mTagList.add("Support");
+        mTagList.add("Tank");
     }
 
-    public Set<String> getTags() {
-        return mTagSet;
+    public List<String> getTags() {
+        return mTagList;
     }
 
-    /**
-     * Creates a map of champions to a list of champions to represent a graph between champions.
-     * Edges are added to the graph if the tags between two champions match
-     * @return Map of champions to related champions
-     */
-    private Map<Champion, Set<Champion>> buildChampionGraph() {
-        Map<Champion, Set<Champion>> graph = new HashMap<>();
+    private void buildChampionAjdMatrix(int[][] adjMatrix) {
+        // Get the size of the matrix (adjMatrix must be square)
+        int size = adjMatrix.length;
 
-        // Get a list of champions from the map
-        List<Champion> championList = new ArrayList<>();
-        for (String name : mChampionMap.keySet()) {
-            championList.add(mChampionMap.get(name));
-        }
-
-        // Map tags to champions with those tags
-        Map<String, Set<Champion>> tagChampionMap = new HashMap<>();
-        for (String tag : mTagSet) {
-            Set<Champion> tagChampions = new HashSet<>();
-            // Add all champions that have the current tag
-            for (Champion champion : championList) {
-                if (champion.getTags().contains(tag)) {
-                    tagChampions.add(champion);
+        // Populate the adjMatrix with distances between each champion
+        Champion lhsChampion, rhsChampion;
+        for (int row = 0; row < size; row++) {
+            lhsChampion = mChampionList.get(row);
+            for (int col = 0; col < size; col++) {
+                if (col < row) {
+                    // Below the diagonal, so copy the value from above because the matrix is
+                    // symmetric
+                    adjMatrix[row][col] = adjMatrix[col][row];
+                } else if (row == col) {
+                    // On the diagonal, so the distance between a champion and itself is INT_MAX
+                    // Note: Set this to INT_MAX so that a champ will never match itself
+                    adjMatrix[row][col] = Integer.MAX_VALUE;
+                } else {
+                    // Above the diagonal, so calculate the distance
+                    rhsChampion = mChampionList.get(col);
+                    adjMatrix[row][col] = calculateChampionDistance(lhsChampion, rhsChampion);
                 }
             }
-            // Add the champion set to the graph
-            tagChampionMap.put(tag, tagChampions);
         }
-
-        // Add all edges to the graph
-        Set<Champion> edges;
-        for (Champion champion : championList) {
-            edges = new HashSet<>();
-            // Take union of all tag sets
-            for (String tag : champion.getTags()) {
-                // Add this check here to catch unknown tags
-                if (tagChampionMap.containsKey(tag)) {
-                    edges.addAll(tagChampionMap.get(tag));
-                }
-            }
-
-            // Remove current champion from the set
-            edges.remove(champion);
-
-            // Add the edges to the graph
-            graph.put(champion, edges);
-        }
-
-        return graph;
-    }
-
-    public Champion getChampionByName(String name) {
-        return mChampionMap.get(name);
     }
 
     public int getRandomChampionId() {
@@ -128,26 +151,45 @@ public class ChampionRecommender {
         return mChampionMap.get(championList.get(randIdx)).getId();
     }
 
-    private Champion getSimilarChampion(Champion targetChampion) {
+    public List<Champion> getKSimilarChampions(Champion targetChampion, int k) {
+        int targetChampionIdx = mChampionList.indexOf(targetChampion);
+        int size = mChampionAdjMatrix[targetChampionIdx].length;
+
+        PriorityQueue<IntPair> bestKMatches = new PriorityQueue<>(k, new Comparator<IntPair>() {
+            @Override
+            public int compare(IntPair lhs, IntPair rhs) {
+                return rhs.distance - lhs.distance;
+            }
+        });
+
+        // Add the initial k champions to the max heap
+        for (int i = 0; i < k; i++) {
+            bestKMatches.add(new IntPair(i, mChampionAdjMatrix[targetChampionIdx][i]));
+        }
+
+        // Check the remaining champions
         int curDist;
-        int bestDist = Integer.MAX_VALUE;
-        Champion result = null;
-        Set<Champion> edges = mChampionGraph.get(targetChampion);
-
-        // Iterate through all champions and find closest one
-        for (Champion champ : edges) {
-            // Calculate distance between current and target
-            curDist = calculateChampionDistance(targetChampion, champ);
-
-            // Compare the result to the best known champ thus far
-            if (curDist < bestDist) {
-                Log.d("LOL", "best distance thus far is: " + curDist);
-                result = champ;
-                bestDist = curDist;
+        IntPair curPair;
+        for (int i = k; i < size; i++) {
+            curDist = mChampionAdjMatrix[targetChampionIdx][i];
+            // If the current distance is better than any of the k best so far, update the heap
+            if (curDist < bestKMatches.peek().distance) {
+                curPair = new IntPair(i, curDist);
+                bestKMatches.poll();
+                bestKMatches.add(curPair);
             }
         }
 
+        // Get the champions from the best k matches
+        List<Champion> result = new ArrayList<>(k);
+        for (int i = 0; i < k; i++) {
+            result.add(mChampionList.get(bestKMatches.poll().championListIdx));
+        }
         return result;
+    }
+
+    public Champion getSimilarChampion(Champion targetChampion) {
+        return getKSimilarChampions(targetChampion, 1).get(0);
     }
 
     /**
@@ -174,6 +216,46 @@ public class ChampionRecommender {
         // Difficulty
         dist += INFO_DIFFICULTY_WEIGHT * Math.abs(lhsInfo.difficulty - rhsInfo.difficulty);
 
+        // Tags
+        int numTags = 1;
+        int tagDist = 0;
+        int lhsIdx, rhsIdx;
+        List<String> lhsTags = lhs.getTags();
+        List<String> rhsTags = rhs.getTags();
+        if (lhsTags.size() > 0 && rhsTags.size() > 0) {
+            lhsIdx = mTagList.indexOf(lhsTags.get(0));
+            rhsIdx = mTagList.indexOf(rhsTags.get(0));
+            if (lhsIdx != -1 && rhsIdx != -1) {
+                tagDist = mTagAdjMatrix[lhsIdx][rhsIdx];
+            } else {
+                tagDist = 10;
+            }
+        }
+        // If both champions have two tags, add the secondary tag distance
+        if (lhsTags.size() > 1 && rhsTags.size() > 1) {
+            lhsIdx = mTagList.indexOf(lhsTags.get(1));
+            rhsIdx = mTagList.indexOf(rhsTags.get(1));
+            if (lhsIdx != -1 && rhsIdx != -1) {
+                tagDist = mTagAdjMatrix[lhsIdx][rhsIdx];
+            } else {
+                tagDist += 10;
+            }
+            numTags++;
+        }
+        // Divide the tagDist by the number of tags to handle 1 or 2 tags
+        tagDist = tagDist / numTags;
+        dist += TAG_WEIGHT * tagDist;
+
         return dist;
+    }
+
+    class IntPair {
+        int championListIdx;
+        int distance;
+
+        public IntPair(int championListIdx, int distance) {
+            this.championListIdx = championListIdx;
+            this.distance = distance;
+        }
     }
 }
