@@ -7,7 +7,9 @@
     <string name="menu_settings">Settings</string>
 
     <string name="custom_directions">Enter Custom Information</string>
-    <string name="custom_button">Find Closest Champion</string>
+    <string name="custom_button">Find Closest Champion(s)</string>
+
+    <string name="num_results">Number of Results</string>
 
     <string name="title_info">Information</string>
     <string name="title_tags">Tags</string>

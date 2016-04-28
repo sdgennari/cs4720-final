@@ -125,7 +125,30 @@
             android:paddingTop="@dimen/padding_half"
             android:paddingBottom="@dimen/padding_half"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:text="@string/num_results"
+            style="@style/TextAppearance.AppTheme.Subtitle"/>
+
+        <TextView
+            android:id="@+id/num_champions_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            tools:text="5"/>
+
+        <SeekBar
+            android:id="@+id/bar_num_champions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="9"
+            android:paddingTop="@dimen/padding_half"
+            android:paddingBottom="@dimen/padding_half"/>
+
         <Button
+            android:id="@+id/button_custom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/custom_button"

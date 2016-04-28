@@ -84,21 +84,6 @@ public class ChampionRecommender {
         // Populate the champion adj matrix
         mChampionAdjMatrix = new int[mChampionMap.size()][mChampionMap.size()];
         buildChampionAjdMatrix(mChampionAdjMatrix);
-
-        // Test champion similarity
-        Champion test = getSimilarChampion(mChampionMap.get("Thresh"));
-        Log.d("LOL", test.getName());
-
-        test = getSimilarChampion(mChampionMap.get("Azir"));
-        Log.d("LOL", test.getName());
-
-        test = getSimilarChampion(mChampionMap.get("Caitlyn"));
-        Log.d("LOL", test.getName());
-
-        List<Champion> testResult = getKSimilarChampions(mChampionMap.get("Thresh"), 5);
-        for (Champion testChampion : testResult) {
-            Log.d("LOL", testChampion.getName());
-        }
     }
 
     public boolean isInitialized() {
@@ -151,7 +136,7 @@ public class ChampionRecommender {
         return mChampionMap.get(championList.get(randIdx)).getId();
     }
 
-    public List<Champion> getKSimilarChampions(Champion targetChampion, int k) {
+    public ArrayList<Integer> getKSimilarChampions(Champion targetChampion, int k) {
         int targetChampionIdx = mChampionList.indexOf(targetChampion);
         int size = mChampionAdjMatrix[targetChampionIdx].length;
 
@@ -181,15 +166,46 @@ public class ChampionRecommender {
         }
 
         // Get the champions from the best k matches
-        List<Champion> result = new ArrayList<>(k);
+        ArrayList<Integer> result = new ArrayList<>(k);
         for (int i = 0; i < k; i++) {
-            result.add(mChampionList.get(bestKMatches.poll().championListIdx));
+            result.add(mChampionList.get(bestKMatches.poll().championListIdx).getId());
         }
         return result;
     }
 
-    public Champion getSimilarChampion(Champion targetChampion) {
-        return getKSimilarChampions(targetChampion, 1).get(0);
+    public ArrayList<Integer> getKSimilarChampionsCustom(Champion customChampion, int k) {
+        PriorityQueue<IntPair> bestKMatches = new PriorityQueue<>(k, new Comparator<IntPair>() {
+            @Override
+            public int compare(IntPair lhs, IntPair rhs) {
+                return rhs.distance - lhs.distance;
+            }
+        });
+
+        // Add the initial k champions to the max heap
+        for (int i = 0; i < k; i++) {
+            bestKMatches.add(new IntPair(i, calculateChampionDistance(customChampion,
+                    mChampionList.get(i))));
+        }
+
+        // Check the remaining champions
+        int curDist;
+        IntPair curPair;
+        for (int i = k; i < mChampionList.size(); i++) {
+            curDist = calculateChampionDistance(customChampion, mChampionList.get(i));
+            // If the current distance is better than any of the k best so far, update the heap
+            if (curDist < bestKMatches.peek().distance) {
+                curPair = new IntPair(i, curDist);
+                bestKMatches.poll();
+                bestKMatches.add(curPair);
+            }
+        }
+
+        // Get the champions from the best k matches
+        ArrayList<Integer> result = new ArrayList<>(k);
+        for (int i = 0; i < k; i++) {
+            result.add(mChampionList.get(bestKMatches.poll().championListIdx).getId());
+        }
+        return result;
     }
 
     /**
