@@ -62,9 +62,6 @@ public class ChampionFragment extends Fragment {
                 @Override
                 public void onChampionRecommenderInitialized() {
                     configureAutoCompleteData();
-
-                    // Remove the initialized listener
-                    mChampionRecommender.removeOnInitializedListener(this);
                 }
             });
             Log.w("LOL", "ChampionRecommender not initialized yet");

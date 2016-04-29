@@ -85,20 +85,16 @@ public class ChampionRecommender {
         mChampionAdjMatrix = new int[mChampionMap.size()][mChampionMap.size()];
         buildChampionAjdMatrix(mChampionAdjMatrix);
 
-        // Notify all listeners
-        for (OnInitializedListener listener : listenerList) {
-            if (listener != null) {
-                listener.onChampionRecommenderInitialized();
-            }
+        // Notify all listeners, removing each one after it is notified
+        OnInitializedListener listener;
+        while (listenerList.size() > 0) {
+            listener = listenerList.pop();
+            listener.onChampionRecommenderInitialized();
         }
     }
 
     public void addOnInitializedListener(OnInitializedListener listener) {
         listenerList.add(listener);
-    }
-
-    public void removeOnInitializedListener(OnInitializedListener listener) {
-        listenerList.remove(listener);
     }
 
     public boolean isInitialized() {

@@ -39,18 +39,29 @@ public class RandomFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Launch detail activity with id of random champion
-                if (mChampionRecommender.isInitialized()) {
-                    Intent intent = new Intent(getActivity(), ChampionDetailActivity.class);
-                    ArrayList<Integer> championIdList = new ArrayList<>();
-                    championIdList.add(mChampionRecommender.getRandomChampionId());
-                    intent.putIntegerArrayListExtra(MainActivity.EXTRA_CHAMPION_ID_LIST, championIdList);
-                    startActivity(intent);
-                } else {
-                    Log.w("LOL", "ChampionRecommender not initialized yet");
-                }
+                launchDetailActivity();
             }
         });
+        if (mChampionRecommender.isInitialized()) {
+            mRandomButton.setEnabled(true);
+        } else {
+            mRandomButton.setEnabled(false);
+            mChampionRecommender.addOnInitializedListener(new ChampionRecommender.OnInitializedListener() {
+                @Override
+                public void onChampionRecommenderInitialized() {
+                    mRandomButton.setEnabled(true);
+                }
+            });
+        }
 
         return rootView;
+    }
+
+    private void launchDetailActivity() {
+        Intent intent = new Intent(getActivity(), ChampionDetailActivity.class);
+        ArrayList<Integer> championIdList = new ArrayList<>();
+        championIdList.add(mChampionRecommender.getRandomChampionId());
+        intent.putIntegerArrayListExtra(MainActivity.EXTRA_CHAMPION_ID_LIST, championIdList);
+        startActivity(intent);
     }
 }

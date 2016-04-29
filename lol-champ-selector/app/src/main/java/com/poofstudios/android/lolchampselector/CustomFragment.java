@@ -122,14 +122,20 @@ public class CustomFragment extends Fragment {
         mCustomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Launch detail activity with ids of champions
-                if (mChampionRecommender.isInitialized()) {
-                    launchDetailActivity();
-                } else {
-                    Log.w("LOL", "ChampionRecommender not initialized yet");
-                }
+                launchDetailActivity();
             }
         });
+        if (mChampionRecommender.isInitialized()) {
+            mCustomButton.setEnabled(true);
+        } else {
+            mCustomButton.setEnabled(false);
+            mChampionRecommender.addOnInitializedListener(new ChampionRecommender.OnInitializedListener() {
+                @Override
+                public void onChampionRecommenderInitialized() {
+                    mCustomButton.setEnabled(true);
+                }
+            });
+        }
 
         return rootView;
     }
