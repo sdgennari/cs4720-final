@@ -148,7 +148,7 @@
             android:paddingBottom="@dimen/padding_half"/>
 
         <Button
-            android:id="@+id/button_custom"
+            android:id="@+id/button_find_champions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/custom_button"

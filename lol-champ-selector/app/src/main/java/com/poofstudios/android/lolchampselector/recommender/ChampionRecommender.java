@@ -1,21 +1,15 @@
 package com.poofstudios.android.lolchampselector.recommender;
 
-import android.support.v4.util.Pair;
-import android.util.Log;
-
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 import com.poofstudios.android.lolchampselector.api.model.ChampionInfo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 /**
  * Recommends champions based on a graph of champions
@@ -29,6 +23,11 @@ public class ChampionRecommender {
     private static final int INFO_MAGIC_WEIGHT = 10;
     private static final int INFO_DIFFICULTY_WEIGHT = 7;
     private static final int TAG_WEIGHT = 4;
+
+    public interface OnInitializedListener {
+        void onChampionRecommenderInitialized();
+    }
+    static LinkedList<OnInitializedListener> listenerList;
 
     Map<String, Champion> mChampionMap;
     List<Champion> mChampionList;
@@ -61,6 +60,7 @@ public class ChampionRecommender {
 
     protected  ChampionRecommender() {
         initializeTagList();
+        listenerList = new LinkedList<>();
     }
 
     protected void init(Map<String, Champion> championMap) {
@@ -84,6 +84,21 @@ public class ChampionRecommender {
         // Populate the champion adj matrix
         mChampionAdjMatrix = new int[mChampionMap.size()][mChampionMap.size()];
         buildChampionAjdMatrix(mChampionAdjMatrix);
+
+        // Notify all listeners
+        for (OnInitializedListener listener : listenerList) {
+            if (listener != null) {
+                listener.onChampionRecommenderInitialized();
+            }
+        }
+    }
+
+    public void addOnInitializedListener(OnInitializedListener listener) {
+        listenerList.add(listener);
+    }
+
+    public void removeOnInitializedListener(OnInitializedListener listener) {
+        listenerList.remove(listener);
     }
 
     public boolean isInitialized() {
@@ -102,6 +117,14 @@ public class ChampionRecommender {
 
     public List<String> getTags() {
         return mTagList;
+    }
+
+    public List<String> getChampionNames() {
+        List<String> result = new ArrayList<>();
+        for (Champion champion : mChampionList) {
+            result.add(champion.getName());
+        }
+        return result;
     }
 
     private void buildChampionAjdMatrix(int[][] adjMatrix) {
@@ -136,6 +159,18 @@ public class ChampionRecommender {
         return mChampionMap.get(championList.get(randIdx)).getId();
     }
 
+    public Champion getChampionByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+        for (Champion champion : mChampionList) {
+            if (champion.getName().equalsIgnoreCase(name)) {
+                return champion;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Integer> getKSimilarChampions(Champion targetChampion, int k) {
         int targetChampionIdx = mChampionList.indexOf(targetChampion);
         int size = mChampionAdjMatrix[targetChampionIdx].length;
@@ -165,11 +200,12 @@ public class ChampionRecommender {
             }
         }
 
-        // Get the champions from the best k matches
+        // Get the champions from the best k matches in reverse order
         ArrayList<Integer> result = new ArrayList<>(k);
         for (int i = 0; i < k; i++) {
             result.add(mChampionList.get(bestKMatches.poll().championListIdx).getId());
         }
+        Collections.reverse(result);
         return result;
     }
 
@@ -200,11 +236,12 @@ public class ChampionRecommender {
             }
         }
 
-        // Get the champions from the best k matches
+        // Get the champions from the best k matches in reverse order
         ArrayList<Integer> result = new ArrayList<>(k);
         for (int i = 0; i < k; i++) {
             result.add(mChampionList.get(bestKMatches.poll().championListIdx).getId());
         }
+        Collections.reverse(result);
         return result;
     }
 

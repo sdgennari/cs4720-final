@@ -62,7 +62,7 @@ public class CustomFragment extends Fragment {
         mSecondaryTagSpinner = (Spinner) rootView.findViewById(R.id.spinner_tag_secondary);
         mNumChampionsBar = (SeekBar) rootView.findViewById(R.id.bar_num_champions);
         mNumChampionsView = (TextView) rootView.findViewById(R.id.num_champions_text);
-        mCustomButton = (Button) rootView.findViewById(R.id.button_custom);
+        mCustomButton = (Button) rootView.findViewById(R.id.button_find_champions);
 
         // Configure spinners
         final List<String> tagList = new ArrayList<>(mChampionRecommender.getTags());

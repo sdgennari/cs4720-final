@@ -8,8 +8,10 @@
 
     <string name="custom_directions">Enter Custom Information</string>
     <string name="custom_button">Find Closest Champion(s)</string>
-
     <string name="num_results">Number of Results</string>
+    <string name="champion">Champion</string>
+    <string name="champion_directions">Select a Champion</string>
+    <string name="champion_error">Enter a valid champion</string>
 
     <string name="title_info">Information</string>
     <string name="title_tags">Tags</string>

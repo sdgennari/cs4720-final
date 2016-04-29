@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new RandomFragment(), "RANDOM");
-        adapter.addFragment(new RandomFragment(), "CHAMPION");
+        adapter.addFragment(new ChampionFragment(), "CHAMPION");
         adapter.addFragment(new CustomFragment(), "CUSTOM");
         viewPager.setAdapter(adapter);
     }

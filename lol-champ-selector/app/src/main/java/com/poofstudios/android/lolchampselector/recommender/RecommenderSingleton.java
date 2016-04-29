@@ -16,7 +16,7 @@ public class RecommenderSingleton {
     }
 
     public static void initChampionRecommender(Map<String, Champion> championMap) {
-       sChampionRecommender.init(championMap);
+        sChampionRecommender.init(championMap);
     }
 
 }
