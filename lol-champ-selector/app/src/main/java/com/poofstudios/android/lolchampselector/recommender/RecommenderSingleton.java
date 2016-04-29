@@ -1,6 +1,6 @@
 package com.poofstudios.android.lolchampselector.recommender;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import com.poofstudios.android.lolchampselector.api.model.Champion;
 
@@ -10,7 +10,7 @@ public class RecommenderSingleton {
 
     static ChampionRecommender sChampionRecommender = new ChampionRecommender();
 
-    @Nullable
+    @NonNull
     public static ChampionRecommender getChampionRecommender() {
         return sChampionRecommender;
     }

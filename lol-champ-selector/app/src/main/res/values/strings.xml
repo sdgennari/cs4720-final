@@ -16,6 +16,7 @@
     <string name="title_passive">Passive</string>
     <string name="title_spells">Spells</string>
     <string name="button_random_champion">Random Champion</string>
+    <string name="random_shake">Shake the device to view a random champion</string>
 
     <!-- champion info titles -->
     <string name="info_attack">Attack</string>
