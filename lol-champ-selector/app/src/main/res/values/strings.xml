@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LolChampSelector</string>
+    <string name="app_name">Lol Champ Selector</string>
 
     <!-- toolbar titles -->
     <string name="toolbar_settings">Settings</string>
